@@ -405,3 +405,7 @@ TRACEABILITY_MATRIX.md
 DECISION_LOG.md
 RISK_REGISTER.md
 ```
+
+## License
+
+Apache License 2.0. See [LICENSE](LICENSE).
