@@ -1,5 +1,174 @@
 # AI_DEV Layered System
 
+`aidev` is a layered workflow and contract-index template for building software
+with AI agents in a controlled, reviewable, and repeatable way.
+
+It is designed for projects where AI should not improvise from chat history
+alone. Instead, AI reads durable project rules, feature maps, API/function/DTO
+contracts, task files, review rules, and verification gates before making
+changes.
+
+## What Is aidev?
+
+`aidev` 是一套给 AI 辅助开发使用的项目控制系统。
+
+它不是业务框架，不是后端框架，也不是自动运行的后台程序。它是一组可复制、
+可裁剪、可审查的 Markdown 规则和索引文件，用来约束 AI 怎么发散、怎么收敛、
+怎么拆任务、怎么执行、怎么 Review、怎么从错误中学习。
+
+核心目标：
+
+- 让 AI 不再只靠聊天上下文写代码。
+- 让每个任务都有明确输入、边界、步骤和验证。
+- 让 API、函数签名、DTO、权限、状态机、文件地图、测试矩阵保持同步。
+- 让大型项目可以用 AI 从 0 到 1 持续开发，而不是一次性生成后失控。
+
+## Why Use It?
+
+AI 直接写代码很快，但在中大型项目里容易出现这些问题：
+
+- 聊天上下文丢失后，AI 忘记之前的架构决定。
+- API、DTO、数据库、测试文档和代码不同步。
+- 任务越做越大，边界模糊，Review 无从下手。
+- 一个错误修完了，但同类错误还会反复出现。
+- 多个 AI 或多个模块并行开发时互相覆盖。
+- 主分支、功能分支、任务状态和 Review 证据混在一起。
+
+`aidev` 用这些文件来解决：
+
+- `CORE/AI_WORKFLOW.md`：AI 工作流。
+- `CORE/TASK_TEMPLATE.md`：任务模板。
+- `CORE/REVIEW_RULES.md`：Review 规则。
+- `CORE/INDEX_REGISTRY.md`：索引系统。
+- `CORE/GIT_WORKFLOW.md`：Git 工作流模式。
+- `PROJECT/*_MAP.md` 和 `PROJECT/*_INDEX.md`：项目级合同。
+- `TASKS/*.md`：每次执行的任务。
+
+## What It Is Not
+
+当前版本的 `aidev` 不是自动化 CLI，也不是后台 daemon。
+
+```text
+你触发
+-> AI 按 aidev 规则读取上下文
+-> AI 创建/执行任务
+-> AI 更新索引并运行验证
+-> AI 进入 Review/Close
+```
+
+它现在不会自动监听文件变更，也不会自动创建分支或自动写代码。
+
+后续可以在这套文件协议上继续增加：
+
+- `aidev check`
+- task generator
+- index validator
+- Git hooks
+- GitHub Actions
+- agent orchestrator
+
+## Quick Start
+
+### Option A: Copy Into An Existing Project
+
+```bash
+git clone https://github.com/sinduke/aidev.git /tmp/aidev
+rsync -a --exclude .git /tmp/aidev/ /path/to/your-project/ai_dev/
+cd /path/to/your-project
+```
+
+Then edit these files first:
+
+```text
+ai_dev/AIDEV_MANIFEST.md
+ai_dev/PROJECT_RULES.md
+ai_dev/PROJECT/PROJECT_PROFILE.md
+ai_dev/PROJECT/PROJECT_RULES.md
+ai_dev/PROJECT/GIT_WORKFLOW.md
+```
+
+Then ask AI:
+
+```text
+进入 Exploration 模式。
+请读取 ai_dev/AIDEV_MANIFEST.md、PROJECT_RULES.md、PROJECT/PROJECT_PROFILE.md、
+PROJECT/PROJECT_RULES.md、PROJECT/GIT_WORKFLOW.md 和相关 PRESETS。
+请告诉我这个项目需要裁剪、保留、新增哪些 aidev 文件。
+先不要写代码。
+```
+
+### Option B: Use It As A Template
+
+Fork or clone this repository, then keep:
+
+```text
+CORE/
+PRESETS/
+README.md
+LICENSE
+```
+
+Create a new project-specific overlay:
+
+```text
+PROJECT/
+TASKS/
+AIDEV_MANIFEST.md
+PROJECT_RULES.md
+```
+
+### First Task Example
+
+```text
+进入 Task 模式。
+请创建 ai_dev/TASKS/001_project_foundation.md。
+必须使用 ai_dev/CORE/TASK_TEMPLATE.md。
+任务要写清楚目标、非目标、Git Workflow、Write Scope、Step IDs、索引更新和验证命令。
+只创建任务文件，不进入 Build。
+```
+
+Then:
+
+```text
+确认进入 Build。
+严格按照 ai_dev/TASKS/001_project_foundation.md 的 Step 顺序执行。
+如果发现任务外范围，先停下来说明。
+```
+
+## Who Is This For?
+
+适合：
+
+- 想用 AI 长期开发一个真实项目的人。
+- 有后端、移动端、前端、后台管理系统等多个子项目的人。
+- 希望 AI 每次都按任务、索引、验证执行的人。
+- 需要 Review、任务状态、分支策略、错误学习机制的人。
+- 准备让多个 AI 并行做不同模块的人。
+
+不适合：
+
+- 只想一次性生成 demo 的项目。
+- 不想维护任务文件、索引、Review 证据的项目。
+- 需要开箱即用 CLI 自动化的人。
+
+## Table Of Contents
+
+- [What Is aidev?](#what-is-aidev)
+- [Why Use It?](#why-use-it)
+- [What It Is Not](#what-it-is-not)
+- [Quick Start](#quick-start)
+- [Who Is This For?](#who-is-this-for)
+- [How To Use](#how-to-use)
+- [Structure](#structure)
+- [New Project Usage](#new-project-usage)
+- [Included Project Overlay](#included-project-overlay)
+- [Current Project Indexes](#current-project-indexes)
+- [Presets](#presets)
+- [FAQ](#faq)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## How To Use
 
 这一节是实际使用入口。以后不管是新项目、新任务、修复、Review，还是开启
@@ -373,7 +542,11 @@ For a new project:
 
 You should not need to regenerate all AI_DEV files for every project.
 
-## Current Project
+## Included Project Overlay
+
+This repository includes a project overlay for a cross-border B2B2C Vapor
+backend. Treat it as a concrete example and starting point. Replace or trim it
+for your own project.
 
 This project uses:
 
@@ -404,6 +577,113 @@ CONFIG_ENV_INDEX.md
 TRACEABILITY_MATRIX.md
 DECISION_LOG.md
 RISK_REGISTER.md
+```
+
+## Presets
+
+Presets are reusable rule packs for a technology stack or business domain.
+
+Current presets:
+
+| Preset | Purpose |
+| --- | --- |
+| `PRESETS/vapor-backend/` | Swift Vapor backend architecture, security, testing, observability. |
+| `PRESETS/cross-border-ecommerce/` | Ecommerce domain model, API, database, integration baseline. |
+
+When creating a new project, choose only the presets that match the project.
+
+Examples:
+
+- Vapor backend: keep `vapor-backend`.
+- Cross-border ecommerce backend: keep both current presets.
+- Mobile app: create or select a mobile preset, then replace ecommerce/backend
+  details as needed.
+- Admin frontend: create or select an admin frontend preset, then keep API
+  contract indexes in `PROJECT/`.
+
+Do not put project-specific details into `CORE/`. Put them under `PROJECT/`.
+
+## FAQ
+
+### Is aidev automatic?
+
+No. Current `aidev` is a workflow and documentation system. You manually ask AI
+to enter Exploration, Decision, Task, Build, Review, or Close mode. AI then uses
+the files here as its execution contract.
+
+### Can I use it with Cursor, Claude Code, Codex, or another AI tool?
+
+Yes. It is plain Markdown. Any AI coding agent that can read repository files can
+use it.
+
+### Do I need to keep every file?
+
+No. `CORE/` is reusable. `PRESETS/` and `PROJECT/` should be selected and trimmed
+for the current project.
+
+### Should every task use a feature branch?
+
+No. The default Git mode can be `simple`. Switch to `feature_branch` or
+`parallel_ai` when source work, review isolation, or parallel AI work needs it.
+
+### Why so many indexes?
+
+Large AI-assisted projects fail when important contracts exist only in chat.
+Indexes make API routes, function signatures, DTOs, files, permissions, states,
+tests, risks, and decisions durable.
+
+### Can this become a CLI?
+
+Yes. The current Markdown contract is the base layer. A future CLI can validate
+task files, check index drift, generate tasks, and enforce Git workflow rules.
+
+## Roadmap
+
+Planned directions:
+
+- `aidev check`: validate required files, task status, indexes, and stale docs.
+- `aidev new-task`: generate a task from `CORE/TASK_TEMPLATE.md`.
+- `aidev validate-task`: verify Write Scope, Index Updates, and Completion
+  Evidence.
+- Index drift checks for API routes, DTOs, functions, files, and tests.
+- GitHub Action for PR validation.
+- More presets:
+  - Flutter app.
+  - SwiftUI app.
+  - Admin frontend.
+  - Node/TypeScript backend.
+  - Generic SaaS.
+- Example projects showing complete Exploration -> Build -> Review lifecycle.
+
+## Contributing
+
+Contributions are welcome.
+
+Useful contribution types:
+
+- Improve `CORE/` workflow rules.
+- Add a new preset.
+- Improve task templates.
+- Add validation scripts.
+- Add real project examples.
+- Improve English/Chinese documentation.
+
+Contribution rules:
+
+- Keep `CORE/` generic.
+- Put framework-specific guidance in `PRESETS/`.
+- Put project-specific examples under an example project or clearly marked sample.
+- Do not add vendor secrets, real credentials, or private project data.
+- Prefer small focused PRs.
+
+Suggested PR checklist:
+
+```text
+- [ ] README or relevant docs updated.
+- [ ] New preset has a clear purpose.
+- [ ] Generic rules stay in CORE.
+- [ ] Project-specific examples are marked as examples.
+- [ ] `git diff --check` passes.
 ```
 
 ## License
