@@ -80,3 +80,73 @@ No application source files are implemented.
 
 When source files are created, add records here and update
 `IMPLEMENTATION_MAP.md`.
+
+## 8. Current Tooling File Inventory
+
+These are aidev template tooling files, not Vapor application source files.
+
+```text
+Path: bin/aidev
+Module: aidev tooling
+Layer: CLI
+Kind: shell wrapper
+Owner Task: 000G_aidev_validation_tooling
+Public Symbols: aidev check command entrypoint
+Depends On: tools/aidev_check.py, python3
+Referenced By: README.md, .github/workflows/aidev-check.yml
+Related API Routes: none
+Related Function IDs: none
+Related DTO IDs: none
+Related Tables: none
+Related Tests: ./bin/aidev check
+Status: implemented
+Notes: Generic wrapper; no project-specific business logic.
+
+Path: tools/aidev_check.py
+Module: aidev tooling
+Layer: Validator
+Kind: Python script
+Owner Task: 000G_aidev_validation_tooling
+Public Symbols: check command, task/index/git/source validation functions
+Depends On: Python standard library, git command when available
+Referenced By: bin/aidev, .github/workflows/aidev-check.yml
+Related API Routes: none
+Related Function IDs: none
+Related DTO IDs: none
+Related Tables: none
+Related Tests: python3 -m py_compile tools/aidev_check.py; ./bin/aidev check
+Status: implemented
+Notes: Checks Markdown workflow contracts and basic source map drift.
+
+Path: .github/workflows/aidev-check.yml
+Module: aidev tooling
+Layer: CI
+Kind: GitHub Actions workflow
+Owner Task: 000G_aidev_validation_tooling
+Public Symbols: aidev-check job
+Depends On: bin/aidev
+Referenced By: GitHub pull_request and main push events
+Related API Routes: none
+Related Function IDs: none
+Related DTO IDs: none
+Related Tables: none
+Related Tests: git diff --check; ./bin/aidev check
+Status: implemented
+Notes: Generic workflow validation.
+
+Path: .github/workflows/vapor-ci.yml
+Module: aidev tooling
+Layer: CI
+Kind: GitHub Actions workflow
+Owner Task: 000G_aidev_validation_tooling
+Public Symbols: vapor-ci job
+Depends On: Package.swift when present, swift-actions/setup-swift
+Referenced By: GitHub pull_request and main push events
+Related API Routes: none
+Related Function IDs: none
+Related DTO IDs: none
+Related Tables: none
+Related Tests: swift build; swift test
+Status: implemented
+Notes: Conditional; skips when Package.swift is absent.
+```

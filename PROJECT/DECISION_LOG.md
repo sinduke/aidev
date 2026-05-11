@@ -432,3 +432,58 @@ Related Docs:
 - `ai_dev/CORE/GIT_WORKFLOW.md`
 - `ai_dev/PROJECT/GIT_WORKFLOW.md`
 - `ai_dev/CORE/TASK_TEMPLATE.md`
+
+### D-0011 Add conservative aidev validation before deeper automation
+
+Status: accepted
+Date: 2026-05-11
+
+Decision:
+
+- Add `./bin/aidev check` as the first executable validation command.
+- Add GitHub Actions for `git diff --check`, `aidev check`, and conditional
+  Vapor `swift build` / `swift test`.
+- Keep validator v0.1 focused on workflow, task, index, Git mode, and path map
+  consistency.
+
+Context:
+
+- Rules and indexes existed, but enforcement depended on AI and human review
+  reading every document correctly.
+- The repository is now intended as an open-source `aidev` template, so PRs need
+  a simple repeatable validation gate.
+
+Rationale:
+
+- A conservative checker catches missing task fields and stale required files
+  without pretending to understand every future framework.
+- Conditional Vapor CI preserves the Swift/Vapor preset without making the
+  generic template unusable for other stacks.
+- Deeper API/DTO/function drift checks can be added after more real tasks prove
+  the contract shape.
+
+Rejected Alternatives:
+
+- Keep automation entirely as future roadmap.
+- Build a large generator/orchestrator before a basic validator exists.
+- Run `swift build` and `swift test` unconditionally in the generic template.
+
+Consequences:
+
+- Task/index/doc changes should run `./bin/aidev check`.
+- PRs get an automatic workflow contract gate.
+- Validator false positives must be treated as tooling bugs and fixed in small
+  iterations.
+
+Related Tasks:
+
+- `000G_aidev_validation_tooling`
+- `001_vapor_foundation`
+
+Related Docs:
+
+- `ai_dev/README.md`
+- `ai_dev/bin/aidev`
+- `ai_dev/tools/aidev_check.py`
+- `ai_dev/.github/workflows/aidev-check.yml`
+- `ai_dev/.github/workflows/vapor-ci.yml`

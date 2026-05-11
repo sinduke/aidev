@@ -11,6 +11,7 @@ CORE
 -> PRESETS
 -> PROJECT overlay
 -> TASKS
+-> optional tooling
 ```
 
 The goal is to reuse the generic AI development system across projects while
@@ -26,6 +27,7 @@ When instructions conflict, follow this order:
 4. Presets listed in this manifest.
 5. Core rules under `ai_dev/CORE/`.
 6. Existing codebase patterns.
+7. Tool output from `aidev check` for validation feedback.
 
 ## 3. Core Layer
 
@@ -42,6 +44,14 @@ ai_dev/CORE/GIT_WORKFLOW.md
 ai_dev/CORE/EXTENSIONS/
 ```
 
+Reusable tooling:
+
+```text
+ai_dev/bin/aidev
+ai_dev/tools/aidev_check.py
+ai_dev/.github/workflows/
+```
+
 Core owns:
 
 - AI workflow.
@@ -51,6 +61,7 @@ Core owns:
 - Optional Git workflow modes.
 - Learning/extensions.
 - Generic mode boundaries.
+- Validation command behavior.
 
 Core must not contain project-specific ecommerce, Vapor, Flutter, backend,
 mobile, admin, payment, or database decisions.
@@ -121,7 +132,31 @@ ai_dev/TASKS/
 
 Build mode must execute from an approved task file.
 
-## 7. Reuse Policy
+Reference tasks may use `Status: example`. They demonstrate the workflow and are
+not evidence that the task was executed in the current repository.
+
+## 7. Tooling Layer
+
+The optional tooling layer provides executable checks for the Markdown contract:
+
+```text
+./bin/aidev check
+```
+
+Current checks are intentionally conservative:
+
+- Required files and indexes exist.
+- Task statuses use allowed values.
+- Active/example/completed tasks contain required sections.
+- Completed tasks contain Review, Verification, Index Update, and Completion
+  Evidence.
+- Project Git workflow mode is valid.
+- Source files under `Sources/` or `Tests/` appear in file/implementation maps.
+
+Tooling must remain generic. Project-specific business rules belong in
+`PROJECT/` or selected `PRESETS/`.
+
+## 8. Reuse Policy
 
 For a new project:
 
@@ -133,7 +168,7 @@ For a new project:
 
 Do not regenerate the whole AI_DEV system for every new project.
 
-## 8. Current Project
+## 9. Current Project
 
 Current project profile:
 

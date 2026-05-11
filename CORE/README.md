@@ -25,5 +25,16 @@ GIT_WORKFLOW.md
 EXTENSIONS/
 ```
 
+Related reusable tooling lives outside Core:
+
+```text
+bin/aidev
+tools/aidev_check.py
+.github/workflows/
+```
+
+The tooling validates Core/Project/Task contracts but should not contain
+project-specific business rules.
+
 When starting a new project, Core can be copied, referenced, or vendored without
 rewriting it.

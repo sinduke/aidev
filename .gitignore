@@ -17,6 +17,10 @@
 tmp/
 temp/
 
+# Python
+__pycache__/
+*.pyc
+
 # Generated archives
 *.zip
 *.tar

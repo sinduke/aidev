@@ -202,14 +202,24 @@ Task status values:
 - `in_review`
 - `completed`
 - `superseded`
+- `example`
 
 Step status values:
 
 - `pending`
+- `planned`
 - `in_progress`
 - `completed`
 - `blocked`
 - `skipped`
+- `not_applicable`
+
+Validation:
+
+- Run `./bin/aidev check` after task file changes when the project includes the
+  aidev CLI.
+- `example` tasks are reference tasks and must not be treated as executed Build
+  evidence.
 
 Exit condition:
 

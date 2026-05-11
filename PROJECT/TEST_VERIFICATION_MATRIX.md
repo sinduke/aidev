@@ -22,6 +22,7 @@ must be covered here.
 Before Vapor code exists:
 
 ```text
+./bin/aidev check
 git diff --check
 find ai_dev -name '.DS_Store' -print
 rg -n "[ \t]+$" ai_dev || true
@@ -30,6 +31,7 @@ rg -n "[ \t]+$" ai_dev || true
 After Vapor foundation exists:
 
 ```text
+./bin/aidev check
 swift build
 swift test
 git diff --check
@@ -72,6 +74,16 @@ Required Before:
 Status:
 Notes:
 ```
+
+## 5.1 AI_DEV Workflow Verification
+
+| Verification ID | Scope | Command/Gate | Required Evidence | Status |
+| --- | --- | --- | --- | --- |
+| V-AIDEV-001 | task/index/workflow contract | `./bin/aidev check` | command passes locally and in PR CI | implemented |
+| V-AIDEV-002 | whitespace and patch hygiene | `git diff --check` | command passes locally and in PR CI | implemented |
+| V-AIDEV-003 | validator syntax | `python3 -m py_compile tools/aidev_check.py` | command passes after validator edits | implemented |
+| V-VAPOR-001 | Swift package build | `swift build` | conditional CI runs only when `Package.swift` exists | planned |
+| V-VAPOR-002 | Swift package tests | `swift test` | conditional CI runs only when `Package.swift` exists | planned |
 
 ## 6. Critical Negative Tests
 

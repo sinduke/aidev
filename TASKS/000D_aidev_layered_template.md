@@ -98,7 +98,16 @@ Required:
 - Learning record required: no.
 - Reason: this is a planned structural upgrade, not an error.
 
-## 12. Completion Evidence
+## 12. Review Plan
+
+- Review mode: documentation and workflow structure review.
+- Required reviewer focus: reusable layer separation, project-specific overlay
+  boundaries, manifest accuracy, and reference path consistency.
+- P0/P1 blocking criteria: generic Core files contain project-specific business
+  rules, project overlay files are not discoverable, or new project reuse
+  guidance is missing.
+
+## 13. Completion Evidence
 
 - Files changed: ai_dev structure and docs.
 - Commands run: listed in final response.

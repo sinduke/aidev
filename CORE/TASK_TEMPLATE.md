@@ -5,7 +5,7 @@ Use this template for every task under `ai_dev/TASKS/`.
 ```markdown
 # <TASK_ID> <Task Name>
 
-Status: draft | proposed | approved | in_progress | blocked | in_review | completed | superseded
+Status: draft | proposed | approved | in_progress | blocked | in_review | completed | superseded | example
 
 ## 1. Goal
 
@@ -214,3 +214,14 @@ Optional / not available:
 - Results:
 - Remaining risks:
 ```
+
+## Validation Notes
+
+`aidev check` validates task structure against this template.
+
+Use `Status: example` for reference tasks that demonstrate the workflow but were
+not executed in the current repository. Example tasks should still include the
+full task shape so they can be copied into real projects safely.
+
+Completed tasks must include Review Plan, Verification Gates, Index Updates, and
+Completion Evidence.

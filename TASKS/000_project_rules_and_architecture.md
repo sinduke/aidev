@@ -1,6 +1,8 @@
 # 000 Project Rules and Architecture
 
-Status: Completed expanded rules draft
+Status: completed
+
+Completion note: expanded rules draft.
 
 ## Goal
 
@@ -112,6 +114,25 @@ For this documentation-only task:
 - Run `git status --short`.
 - Run documentation keyword checks for architecture, state machine, outbox,
   RBAC, observability, and testing rules.
+
+## Review Plan
+
+- Review mode: architecture foundation review.
+- Required reviewer focus: cross-border ecommerce risks, project-specific
+  uniqueness, Vapor/backend boundaries, and whether the foundation is actionable
+  for future task files.
+- P0/P1 blocking criteria: unclear architecture boundary, missing first-phase
+  route, no Vapor layering rule, or no documented verification gate.
+
+## Completion Evidence
+
+- Files changed: project rules, Vapor preset rules, ecommerce preset indexes,
+  implementation map, and this task record.
+- Commands run: documentation checks and git status were used during the
+  original foundation pass.
+- Remaining risks: final project name, database choice, target markets, and
+  payment settlement scope remained open and were captured in later risk and
+  decision records.
 
 ## Open Questions
 

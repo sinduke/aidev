@@ -1,0 +1,41 @@
+name: Vapor CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  vapor-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect Swift package
+        id: package
+        shell: bash
+        run: |
+          if [ -f Package.swift ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Skip when Package.swift is absent
+        if: steps.package.outputs.present != 'true'
+        run: echo "Package.swift not found; skipping Vapor CI."
+
+      - name: Setup Swift
+        if: steps.package.outputs.present == 'true'
+        uses: swift-actions/setup-swift@v2
+
+      - name: Swift build
+        if: steps.package.outputs.present == 'true'
+        run: swift build
+
+      - name: Swift test
+        if: steps.package.outputs.present == 'true'
+        run: swift test

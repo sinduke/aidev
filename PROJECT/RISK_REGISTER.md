@@ -300,7 +300,7 @@ Related Tasks:
 
 - `000D_aidev_layered_template`
 
-### R-0009 Contract indexes are still manually maintained
+### R-0009 Contract indexes have only partial automated validation
 
 Status: open
 Severity: P2
@@ -308,9 +308,10 @@ Type: workflow
 
 Risk:
 
-- API, function, DTO, file, permission, state, and test indexes now exist, but
-  there is not yet an automated checker that proves source files and indexes stay
-  synchronized.
+- API, function, DTO, file, permission, state, and test indexes now exist. The
+  first validator checks required files, task structure, Git mode, and source
+  path map coverage, but it does not yet prove every API/DTO/function contract is
+  synchronized with source code.
 
 Impact:
 
@@ -321,8 +322,10 @@ Mitigation:
 
 - `CORE/INDEX_REGISTRY.md`, `TASK_TEMPLATE.md`, `AI_WORKFLOW.md`, and
   `REVIEW_RULES.md` now require index updates.
-- Add tooling later under `ai_dev/TOOLS/` or project scripts once source code and
-  stable file conventions exist.
+- `./bin/aidev check` now validates required files, task status/sections, Git
+  workflow mode, and basic source file map coverage.
+- Add deeper route/DTO/function checks once source code and stable conventions
+  exist.
 
 Owner:
 
@@ -344,6 +347,7 @@ Related Docs:
 Related Tasks:
 
 - `000E_aidev_contract_indexes`
+- `000G_aidev_validation_tooling`
 
 ### R-0010 Optional branch discipline can be skipped accidentally
 
@@ -390,3 +394,47 @@ Related Docs:
 Related Tasks:
 
 - `000F_git_workflow_modes`
+
+### R-0011 Validator v0.1 is intentionally conservative
+
+Status: open
+Severity: P2
+Type: workflow
+
+Risk:
+
+- `aidev check` validates Markdown structure and basic path map coverage, but it
+  does not parse Swift ASTs, route registration, DTO fields, database migrations,
+  or permission usage.
+
+Impact:
+
+- A future task could pass `aidev check` while still missing a deeper API,
+  function, DTO, permission, or schema update.
+
+Mitigation:
+
+- Keep Review mode responsible for semantic checks.
+- Treat validator output as a minimum gate, not full correctness proof.
+- Add deeper checks incrementally after `001_vapor_foundation` establishes stable
+  source layout and conventions.
+
+Owner:
+
+- AI agent / aidev maintainers.
+
+Required Before:
+
+- Scaling to frequent source-code implementation, PR handoff, or parallel AI
+  development.
+
+Related Docs:
+
+- `ai_dev/tools/aidev_check.py`
+- `ai_dev/CORE/REVIEW_RULES.md`
+- `ai_dev/PROJECT/TEST_VERIFICATION_MATRIX.md`
+
+Related Tasks:
+
+- `000G_aidev_validation_tooling`
+- `001_vapor_foundation`

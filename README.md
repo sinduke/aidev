@@ -46,7 +46,8 @@ AI 直接写代码很快，但在中大型项目里容易出现这些问题：
 
 ## What It Is Not
 
-当前版本的 `aidev` 不是自动化 CLI，也不是后台 daemon。
+当前版本的 `aidev` 不是后台 daemon，也不是会自动写代码的 agent
+orchestrator。
 
 ```text
 你触发
@@ -58,13 +59,17 @@ AI 直接写代码很快，但在中大型项目里容易出现这些问题：
 
 它现在不会自动监听文件变更，也不会自动创建分支或自动写代码。
 
+当前提供一个轻量 CLI 检查入口：
+
+```bash
+./bin/aidev check
+```
+
 后续可以在这套文件协议上继续增加：
 
-- `aidev check`
 - task generator
 - index validator
 - Git hooks
-- GitHub Actions
 - agent orchestrator
 
 ## Quick Start
@@ -95,6 +100,12 @@ Then ask AI:
 PROJECT/PROJECT_RULES.md、PROJECT/GIT_WORKFLOW.md 和相关 PRESETS。
 请告诉我这个项目需要裁剪、保留、新增哪些 aidev 文件。
 先不要写代码。
+```
+
+Run the local contract check:
+
+```bash
+ai_dev/bin/aidev check
 ```
 
 ### Option B: Use It As A Template
@@ -149,7 +160,7 @@ Then:
 
 - 只想一次性生成 demo 的项目。
 - 不想维护任务文件、索引、Review 证据的项目。
-- 需要开箱即用 CLI 自动化的人。
+- 需要 AI 自动监听、自动拆任务、自动合并分支的人。
 
 ## Table Of Contents
 
@@ -159,6 +170,7 @@ Then:
 - [Quick Start](#quick-start)
 - [Who Is This For?](#who-is-this-for)
 - [How To Use](#how-to-use)
+- [Validation And CI](#validation-and-ci)
 - [Structure](#structure)
 - [New Project Usage](#new-project-usage)
 - [Included Project Overlay](#included-project-overlay)
@@ -484,6 +496,7 @@ Risk/Decision、Learning Impact 都已经处理。
 文档阶段常用：
 
 ```bash
+ai_dev/bin/aidev check
 find ai_dev -name '.DS_Store' -print
 git diff --check
 rg -n "[ \t]+$" ai_dev || true
@@ -497,6 +510,65 @@ swift build
 swift test
 git diff --check
 ```
+
+## Validation And CI
+
+`aidev` includes a minimal validator:
+
+```bash
+./bin/aidev check
+```
+
+If `aidev` is copied under a project as `ai_dev/`, run it from the project root
+as:
+
+```bash
+ai_dev/bin/aidev check
+```
+
+Current checks:
+
+- Required Core/Project/Task files exist.
+- Required project indexes exist and are non-empty.
+- `TASKS/*.md` has a legal `Status`.
+- Active, completed, and example tasks contain the required sections.
+- Completed tasks include Review Plan, Verification Gates, Index Updates, and
+  Completion Evidence.
+- Project Git workflow mode is valid.
+- When `Sources/` or `Tests/` exist, source files are referenced by
+  `PROJECT/FILE_MAP.md` and `PROJECT/IMPLEMENTATION_MAP.md`.
+
+The validator is intentionally conservative. It does not parse Swift ASTs and it
+does not claim to understand every API/DTO/function change. It catches workflow
+and contract drift early so Review has a concrete failure signal.
+
+GitHub Actions included:
+
+```text
+.github/workflows/aidev-check.yml
+.github/workflows/vapor-ci.yml
+```
+
+When this repository is used directly, these workflows run from the repository
+root. When `aidev` is copied into another project as `ai_dev/`, copy or adapt the
+workflow files into that project's root `.github/workflows/` directory and use
+`ai_dev/bin/aidev check` in the workflow command.
+
+`aidev-check.yml` runs:
+
+```bash
+git diff --check
+./bin/aidev check
+```
+
+`vapor-ci.yml` runs `swift build` and `swift test` only when `Package.swift`
+exists. This keeps the template usable for non-Swift projects while still giving
+Vapor projects a ready CI path.
+
+The repository also includes `TASKS/001_vapor_foundation.md` as a full reference
+task. It is marked `Status: example`, which means it demonstrates the complete
+Exploration -> Build -> Review -> Close shape but is not execution evidence for
+this repository.
 
 This directory is split into reusable and project-specific layers.
 
@@ -607,9 +679,11 @@ Do not put project-specific details into `CORE/`. Put them under `PROJECT/`.
 
 ### Is aidev automatic?
 
-No. Current `aidev` is a workflow and documentation system. You manually ask AI
-to enter Exploration, Decision, Task, Build, Review, or Close mode. AI then uses
-the files here as its execution contract.
+Partly. Current `aidev` has an automated check command, but the workflow is still
+manually triggered. You ask AI to enter Exploration, Decision, Task, Build,
+Review, or Close mode. AI then uses the files here as its execution contract.
+
+Use `./bin/aidev check` to validate the contract after task/index/doc changes.
 
 ### Can I use it with Cursor, Claude Code, Codex, or another AI tool?
 
@@ -634,19 +708,18 @@ tests, risks, and decisions durable.
 
 ### Can this become a CLI?
 
-Yes. The current Markdown contract is the base layer. A future CLI can validate
-task files, check index drift, generate tasks, and enforce Git workflow rules.
+Yes. The first CLI command is already available as `./bin/aidev check`. Future
+commands can generate tasks, perform deeper index drift checks, and enforce more
+Git workflow rules.
 
 ## Roadmap
 
 Planned directions:
 
-- `aidev check`: validate required files, task status, indexes, and stale docs.
 - `aidev new-task`: generate a task from `CORE/TASK_TEMPLATE.md`.
-- `aidev validate-task`: verify Write Scope, Index Updates, and Completion
-  Evidence.
-- Index drift checks for API routes, DTOs, functions, files, and tests.
-- GitHub Action for PR validation.
+- Deeper `aidev check` rules for API routes, DTOs, functions, files, and tests.
+- Optional `aidev validate-task` focused on one task file.
+- Optional Git hooks.
 - More presets:
   - Flutter app.
   - SwiftUI app.

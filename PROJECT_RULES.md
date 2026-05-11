@@ -13,6 +13,7 @@ Before any non-trivial work, read:
 6. Relevant project contract indexes under `ai_dev/PROJECT/`.
 7. Relevant preset docs.
 8. Relevant core workflow/review/index/Git docs.
+9. `./bin/aidev check` output when validation is relevant.
 
 ## 2. Layer Boundary
 
@@ -23,6 +24,7 @@ CORE      = reusable AI workflow and learning system
 PRESETS   = reusable technical/domain rules
 PROJECT   = current project-specific overlay
 TASKS     = approved execution plans
+TOOLING   = optional executable validation
 ```
 
 Do not put project-specific business rules into `CORE/`.
@@ -42,6 +44,10 @@ the same task.
 
 If a task changes source files or coordinates multiple AI agents, check
 `ai_dev/PROJECT/GIT_WORKFLOW.md` and follow the selected branch mode.
+
+If the project includes the `aidev` CLI, run `./bin/aidev check` after changing
+task files, project indexes, workflow docs, or source files covered by the file
+maps.
 
 For source or contract changes, check `ai_dev/CORE/INDEX_REGISTRY.md` and update
 the active project indexes:
@@ -81,4 +87,10 @@ The active core is:
 
 ```text
 ai_dev/CORE/
+```
+
+The active tooling entrypoint is:
+
+```text
+ai_dev/bin/aidev
 ```

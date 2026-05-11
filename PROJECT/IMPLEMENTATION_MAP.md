@@ -34,6 +34,10 @@ ai_dev/CORE/EXTENSIONS/WORKFLOW_IMPROVEMENTS.md
 ai_dev/CORE/EXTENSIONS/PATTERN_LIBRARY.md
 ai_dev/CORE/EXTENSIONS/templates/ERROR_REVIEW_TEMPLATE.md
 ai_dev/CORE/EXTENSIONS/templates/WORKFLOW_EXTENSION_TEMPLATE.md
+ai_dev/bin/aidev
+ai_dev/tools/aidev_check.py
+ai_dev/.github/workflows/aidev-check.yml
+ai_dev/.github/workflows/vapor-ci.yml
 ai_dev/PRESETS/README.md
 ai_dev/PRESETS/vapor-backend/ARCHITECTURE.md
 ai_dev/PRESETS/vapor-backend/SECURITY_RULES.md
@@ -67,6 +71,8 @@ ai_dev/TASKS/000C_extension_governance.md
 ai_dev/TASKS/000D_aidev_layered_template.md
 ai_dev/TASKS/000E_aidev_contract_indexes.md
 ai_dev/TASKS/000F_git_workflow_modes.md
+ai_dev/TASKS/000G_aidev_validation_tooling.md
+ai_dev/TASKS/001_vapor_foundation.md
 ```
 
 ## 3. Planned Source Roots
@@ -129,10 +135,17 @@ ai_dev/CORE/EXTENSIONS/LEARNING_LOOP.md
 ai_dev/CORE/EXTENSIONS/ERROR_KNOWLEDGE_BASE.md
 ai_dev/CORE/EXTENSIONS/WORKFLOW_IMPROVEMENTS.md
 ai_dev/CORE/EXTENSIONS/PATTERN_LIBRARY.md
+ai_dev/bin/aidev
+ai_dev/tools/aidev_check.py
+ai_dev/.github/workflows/aidev-check.yml
+ai_dev/.github/workflows/vapor-ci.yml
 ```
 
 These files control how AI agents explore, decide, decompose tasks, build,
 review, close work, and learn from errors.
+
+The CLI and workflow files provide executable validation for the Markdown
+contract. They do not replace Review mode and must remain generic.
 
 Project execution state lives in:
 
